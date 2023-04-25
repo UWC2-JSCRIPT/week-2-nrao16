@@ -9,9 +9,6 @@ module.exports = router;
 
 router.post("/", async (req, res, next) => {
     const event = req.body;
-    console.log(`calendarId: ${req.params.calendarId}`);
-    console.log(`event: ${JSON.stringify(event)}`);
-
     if (!event || JSON.stringify(event) === '{}'
         || !event.name || !event.date) {
         res.status(400).send('Event name and date are required');
