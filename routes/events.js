@@ -3,6 +3,7 @@ const { Router } = require("express");
 const EventDAO = require('../daos/events')
 const CalendarDAO = require('../daos/calendars')
 const router = Router({ mergeParams: true });
+const mongoose = require('mongoose');
 
 module.exports = router;
 
@@ -46,8 +47,8 @@ router.get("/:eventId", async (req, res, next) => {
         if (!isCalendarFound) {
             res.status(404).send(`calendar with id ${req.params.calendarId} not found.`);
         } else {
-            const event = await EventDAO.getById(req.params.eventId);
-            event && event.calendarId === req.params.calendarId ? res.json(event) : res.sendStatus(404);
+            const event = await EventDAO.getById(req.params.calendarId, req.params.eventId);
+            event ? res.json(event) : res.sendStatus(404);
         }
     } catch (e) {
         next(e);
@@ -78,7 +79,7 @@ router.delete("/:eventId", async (req, res, next) => {
             res.status(404).send(`calendar with id ${req.params.calendarId} not found.`);
         } else {
             const event = await EventDAO.removeById(req.params.calendarId, req.params.eventId);
-            event ? res.sendStatus(200) : res.sendStatus(404);
+            event?.deletedCount > 0 ? res.sendStatus(200) : res.sendStatus(404);
         }
     } catch (e) {
         next(e);
