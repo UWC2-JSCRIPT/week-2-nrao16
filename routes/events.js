@@ -3,7 +3,6 @@ const { Router } = require("express");
 const EventDAO = require('../daos/events')
 const CalendarDAO = require('../daos/calendars')
 const router = Router({ mergeParams: true });
-const mongoose = require('mongoose');
 
 module.exports = router;
 
